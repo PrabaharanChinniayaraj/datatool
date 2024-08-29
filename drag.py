@@ -104,18 +104,29 @@ st.write("Original DataFrame:")
 st.dataframe(df)
 
 # Select columns for aggregation
-group_by_column = st.selectbox("Select column to group by", df.columns)
-aggregate_column = st.multiselect("Select columns to aggregate", df.columns)
+group_columns = st.multiselect("Select columns to group by", options=df.columns, default=["City", "Category"])
 
 # Select aggregate functions
-agg_functions = st.multiselect("Select aggregate functions", ["sum", "mean", "min", "max", "count"])
+aggregate_functions = {
+    "Sum": "sum",
+    "Mean": "mean",
+    "Max": "max",
+    "Min": "min",
+    "Count": "count"
+}
 
-# Apply the aggregation
-if st.button("Aggregate"):
-    if aggregate_column and agg_functions:
-        agg_dict = {col: agg_functions for col in aggregate_column}
-        aggregated_df = df.groupby(group_by_column).agg(agg_dict)
-        st.write("Aggregated DataFrame:")
-        st.dataframe(aggregated_df)
-    else:
-        st.write("Please select columns and aggregate functions.")
+selected_aggregates = st.multiselect("Select aggregate functions", options=list(aggregate_functions.keys()), default=["Sum", "Mean"])
+
+# Apply group by and aggregate functions
+if group_columns and selected_aggregates:
+    agg_dict = {col: [aggregate_functions[func] for func in selected_aggregates] for col in df.columns if col not in group_columns}
+    grouped_df = df.groupby(group_columns).agg(agg_dict)
+    grouped_df.columns = ['_'.join(col) for col in grouped_df.columns]
+
+    st.subheader("Grouped and Aggregated Data")
+    st.write(grouped_df)
+
+# Example: Save the grouped data to a CSV file
+if st.button("Save to CSV"):
+    grouped_df.to_csv("grouped_data.csv")
+    st.write("Data saved to grouped_data.csv")
