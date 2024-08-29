@@ -33,6 +33,8 @@ if uploaded_file is not None:
         st.write(f"Displaying data from '{sheet_choice}' with {skip_rows} rows skipped:")
         st.dataframe(df)
         column = st.selectbox("Select a column to change case:", df.columns)
+        case_type = st.radio("Select case type:", ("lowercase", "uppercase", "sentence case"))
+
         if st.button("Change Case"):
             df = change_case(df, column, case_type)
             st.write("Updated Data:")
