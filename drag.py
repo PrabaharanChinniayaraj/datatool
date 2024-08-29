@@ -3,6 +3,26 @@ from streamlit_sortables import sort_items
 import pandas as pd
 
 st.title("Draggable Date Format Widget")
+uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
+
+if uploaded_file is not None:
+    # Load the Excel file
+    xls = pd.ExcelFile(uploaded_file)
+    
+    # Display the available sheets
+    sheet_names = xls.sheet_names
+    sheet_choice = st.selectbox("Select a sheet", sheet_names)
+    
+    # Input box to enter the number of rows to skip
+    skip_rows = st.number_input("Number of rows to skip", min_value=0, value=0, step=1)
+    
+    # Load the selected sheet with the specified number of rows to skip
+    if sheet_choice:
+        df = pd.read_excel(xls, sheet_name=sheet_choice, skiprows=skip_rows)
+        
+        # Display the dataframe
+        st.write(f"Displaying data from '{sheet_choice}' with {skip_rows} rows skipped:")
+        st.dataframe(df)
 
 # List of date format components
 date_components = ["Day", "Month", "Year"]
