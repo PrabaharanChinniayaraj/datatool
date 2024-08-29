@@ -60,18 +60,12 @@ st.write(f"Example: {formatted_example_date}")
 
 
 
-data = {
-    "Name": ["Alice", "Bob", "Charlie", "David", "Eve"],
-    "Age": [24, 27, 22, 32, 29],
-    "City": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"],
-    "Score": [85, 91, 88, 95, 79]
-}
-df = pd.DataFrame(data)
+
 
 st.title("Draggable DataFrame Filter Widget")
 
 # List of filter components (columns)
-filter_columns = ["Age", "City", "Score"]
+filter_columns =  df.columns
 
 # Draggable list for selecting filter columns
 st.subheader("Drag and Drop to Select Filter Columns")
