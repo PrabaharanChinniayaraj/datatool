@@ -65,6 +65,7 @@ st.write(f"Example: {formatted_example_date}")
 st.title("Draggable DataFrame Filter Widget")
 
 # List of filter components (columns)
+df = pd.read_excel(xls, sheet_name=sheet_choice, skiprows=skip_rows)
 filter_columns =  df.columns
 
 # Draggable list for selecting filter columns
