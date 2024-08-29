@@ -64,38 +64,38 @@ st.write(f"Example: {formatted_example_date}")
 
 st.title("Conditional Filtering Widget for DataFrame")
 
-        def apply_condition(column, condition, value):
-            if condition == "equals":
-                return df[column] == value
-            elif condition == "not equals":
-                return df[column] != value
-            elif condition == "greater than":
-                return df[column] > value
-            elif condition == "less than":
-                return df[column] < value
-            elif condition == "greater than or equal":
-                return df[column] >= value
-            elif condition == "less than or equal":
-                return df[column] <= value
-            elif condition == "contains":
-                return df[column].str.contains(value, case=False, na=False)
-            elif condition == "does not contain":
-                return ~df[column].str.contains(value, case=False, na=False)
+    def apply_condition(column, condition, value):
+        if condition == "equals":
+            return df[column] == value
+        elif condition == "not equals":
+            return df[column] != value
+        elif condition == "greater than":
+            return df[column] > value
+        elif condition == "less than":
+            return df[column] < value
+        elif condition == "greater than or equal":
+            return df[column] >= value
+        elif condition == "less than or equal":
+            return df[column] <= value
+        elif condition == "contains":
+            return df[column].str.contains(value, case=False, na=False)
+        elif condition == "does not contain":
+            return ~df[column].str.contains(value, case=False, na=False)
 
-        column = st.selectbox("Select column to filter", df.columns)
-        if df[column].dtype in ['int64', 'float64']:
-            condition = st.selectbox("Select condition", ["equals", "not equals", "greater than", "less than", "greater than or equal", "less than or equal"])
-            value = st.number_input(f"Enter value for {column}")
-        elif df[column].dtype == 'object':
-            condition = st.selectbox("Select condition", ["equals", "not equals", "contains", "does not contain"])
-            value = st.text_input(f"Enter value for {column}")
-        else:
-            st.write(f"Filtering not supported for column type: {df[column].dtype}")
-            condition, value = None, None
+    column = st.selectbox("Select column to filter", df.columns)
+    if df[column].dtype in ['int64', 'float64']:
+        condition = st.selectbox("Select condition", ["equals", "not equals", "greater than", "less than", "greater than or equal", "less than or equal"])
+        value = st.number_input(f"Enter value for {column}")
+    elif df[column].dtype == 'object':
+        condition = st.selectbox("Select condition", ["equals", "not equals", "contains", "does not contain"])
+        value = st.text_input(f"Enter value for {column}")
+    else:
+        st.write(f"Filtering not supported for column type: {df[column].dtype}")
+        condition, value = None, None
 
-        if condition and value is not None:
-            mask = apply_condition(column, condition, value)
-            filtered_df = df[mask]
+    if condition and value is not None:
+        mask = apply_condition(column, condition, value)
+        filtered_df = df[mask]
 
-            st.subheader("Filtered DataFrame")
-            st.write(filtered_df)
+        st.subheader("Filtered DataFrame")
+        st.write(filtered_df)
