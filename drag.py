@@ -99,3 +99,23 @@ if condition and value is not None:
 
     st.subheader("Filtered DataFrame")
     st.write(filtered_df)
+st.title("DataFrame Aggregation Example")
+st.write("Original DataFrame:")
+st.dataframe(df)
+
+# Select columns for aggregation
+group_by_column = st.selectbox("Select column to group by", df.columns)
+aggregate_column = st.multiselect("Select columns to aggregate", df.columns)
+
+# Select aggregate functions
+agg_functions = st.multiselect("Select aggregate functions", ["sum", "mean", "min", "max", "count"])
+
+# Apply the aggregation
+if st.button("Aggregate"):
+    if aggregate_column and agg_functions:
+        agg_dict = {col: agg_functions for col in aggregate_column}
+        aggregated_df = df.groupby(group_by_column).agg(agg_dict)
+        st.write("Aggregated DataFrame:")
+        st.dataframe(aggregated_df)
+    else:
+        st.write("Please select columns and aggregate functions.")
