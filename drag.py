@@ -104,7 +104,11 @@ st.write("Original DataFrame:")
 st.dataframe(df)
 
 # Select columns for aggregation
-group_columns = st.multiselect("Select columns to group by", options=df.columns, default=["City", "Category"])
+default_columns = ["", ""]
+available_defaults = [col for col in default_columns if col in df.columns]
+
+# Select columns for grouping
+group_columns = st.multiselect("Select columns to group by", options=df.columns.tolist(), default=available_defaults)
 
 # Select aggregate functions
 aggregate_functions = {
