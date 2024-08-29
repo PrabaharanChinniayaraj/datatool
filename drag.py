@@ -11,7 +11,6 @@ def change_case(df, column, case_type):
     elif case_type == "sentence case":
         df[column] = df[column].str.capitalize()
     return df
-st.title("Draggable Date Format Widget")
 uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
 
 if uploaded_file is not None:
