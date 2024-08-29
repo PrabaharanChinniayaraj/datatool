@@ -11,6 +11,10 @@ def change_case(df, column, case_type):
     elif case_type == "sentence case":
         df[column] = df[column].str.capitalize()
     return df
+def format_date(df, date_column, format_string):
+    df[date_column] = df[date_column].dt.strftime(format_string)
+    return df
+
 uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
 
 if uploaded_file is not None:
@@ -40,10 +44,8 @@ if uploaded_file is not None:
             st.dataframe(df)
 
 # List of date format components
+ # Date format selection
 date_components = ["Day", "Month", "Year"]
-
-# Display the draggable list
-st.subheader("Created By-: Prabaharan Chinniayaraju")
 st.subheader("Drag and Drop to Create Your Date Format")
 sorted_date_components = sort_items(date_components, direction="horizontal", key="date_format")
 
@@ -52,10 +54,21 @@ st.subheader("Selected Date Format")
 formatted_date = "-".join(sorted_date_components)
 st.write(f"Date Format: {formatted_date}")
 
-# Optional: Display an example date using the selected format
+# Example date
 example_date = {"Day": "12", "Month": "08", "Year": "2024"}
 formatted_example_date = "-".join([example_date[component] for component in sorted_date_components])
 st.write(f"Example: {formatted_example_date}")
+
+# Apply date formatting to columns with date values
+date_columns = [col for col in df.columns if pd.api.types.is_datetime64_any_dtype(df[col])]
+if date_columns:
+    st.subheader("Select a date column to apply the format:")
+    date_column = st.selectbox("Select date column", date_columns)
+    
+    if date_column:
+        formatted_df = format_date(df, date_column, formatted_date)
+        st.write("Formatted Data:")
+        st.dataframe(formatted_df)
 
 
 
