@@ -2,6 +2,15 @@ import streamlit as st
 from streamlit_sortables import sort_items
 import pandas as pd
 
+
+def change_case(df, column, case_type):
+    if case_type == "lowercase":
+        df[column] = df[column].str.lower()
+    elif case_type == "uppercase":
+        df[column] = df[column].str.upper()
+    elif case_type == "sentence case":
+        df[column] = df[column].str.capitalize()
+    return df
 st.title("Draggable Date Format Widget")
 uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
 
@@ -23,6 +32,11 @@ if uploaded_file is not None:
         # Display the dataframe
         st.write(f"Displaying data from '{sheet_choice}' with {skip_rows} rows skipped:")
         st.dataframe(df)
+        column = st.selectbox("Select a column to change case:", df.columns)
+        if st.button("Change Case"):
+            df = change_case(df, column, case_type)
+            st.write("Updated Data:")
+            st.dataframe(df)
 
 # List of date format components
 date_components = ["Day", "Month", "Year"]
